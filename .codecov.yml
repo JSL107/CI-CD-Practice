@@ -2,12 +2,12 @@ coverage:
   status:
     project:
       default:
-        target: 50%         # 전체 커버리지가 50% 이상일 것
-        threshold: 1%       # 이전보다 1% 이하 감소는 허용
+        target: 50%
+        threshold: 1%
         if_not_found: success
         informational: false
     patch:
       default:
-        target: 50%         # PR에서 추가된 코드의 커버리지 기준
+        target: 50%
         threshold: 0%
         informational: false
