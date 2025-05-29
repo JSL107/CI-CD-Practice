@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  release:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Release Please
+        id: release
+        uses: google-github-actions/release-please-action@v4
+        with:
+          release-type: maven
+          package-name: auth
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout source
+        if: steps.release.outputs.release_created
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        if: steps.release.outputs.release_created
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        if: steps.release.outputs.release_created
+        run: mvn clean package -DskipTests
+
+      - name: Upload .jar to GitHub Release
+        if: steps.release.outputs.release_created
+        uses: softprops/action-gh-release@v1
+        with:
+          files: target/*.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
