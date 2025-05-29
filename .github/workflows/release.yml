@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - main  # main 브랜치에 push 될 때마다 실행됨
+      - main
 
 permissions:
   contents: write
