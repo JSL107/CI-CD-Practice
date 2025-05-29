@@ -1,6 +1,11 @@
 # 🚀 CI/CD Practice
 
 GitHub Actions를 활용한 CI/CD 파이프라인을 적용하여 안정적인 유지 보수 학습을 목표로 합니다.
+<br>
+
+[![codecov](https://codecov.io/gh/JSL107/CI-CD-Practice/branch/main/graph/badge.svg?token=2W6QF18C12)](https://codecov.io/gh/JSL107/CI-CD-Practice)
+[![Build Status](https://github.com/JSL107/CI-CD-Practice/actions/workflows/ci.yml/badge.svg)](https://github.com/JSL107/CI-CD-Practice/actions)
+[![graph](https://app.codecov.io/gh/JSL107/CI-CD-Practice/graphs)](https://codecov.io/github/JSL107/CI-CD-Practice/graphs/sunburst.svg?token=2W6QF18C12)
 
 <br>
 
