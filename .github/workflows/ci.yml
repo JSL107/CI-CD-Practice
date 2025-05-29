@@ -31,3 +31,9 @@ jobs:
         with:
           name: jacoco-report                 # GitHub Actions에서 보여질 파일 이름
           path: target/site/jacoco            # 이 폴더 안의 HTML 리포트 전체 업로드
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: target/site/jacoco/jacoco.xml

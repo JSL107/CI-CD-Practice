@@ -96,6 +96,27 @@
 							<goal>report</goal>
 						</goals>
 					</execution>
+					<execution>
+						<id>check</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<rule>
+									<element>BUNDLE</element> <!-- 전체 프로젝트 기준 -->
+									<limits>
+										<limit>
+											<counter>INSTRUCTION</counter> <!-- 기준: 명령어 단위 -->
+											<value>COVEREDRATIO</value>
+											<minimum>0.50</minimum> <!-- 50% 이상이어야 통과 -->
+										</limit>
+									</limits>
+								</rule>
+							</rules>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
