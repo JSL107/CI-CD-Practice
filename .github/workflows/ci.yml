@@ -21,5 +21,13 @@ jobs:
           cache: maven
           java-version: '17'
 
-      - name: Build with Maven
-        run: mvn clean install
+#      - name: Build with Maven
+#        run: mvn clean install
+      - name: Build and Generate Coverage Report
+        run: mvn clean verify
+
+      - name: Upload JaCoCo HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report                 # GitHub Actions에서 보여질 파일 이름
+          path: target/site/jacoco            # 이 폴더 안의 HTML 리포트 전체 업로드
