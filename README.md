@@ -9,7 +9,7 @@ GitHub Actions를 활용한 CI/CD 파이프라인을 적용하여 안정적인 �
 [![codecov](https://codecov.io/gh/JSL107/CI-CD-Practice/branch/main/graph/badge.svg?token=2W6QF18C12)](https://codecov.io/gh/JSL107/CI-CD-Practice)
 [![Build Status](https://github.com/JSL107/CI-CD-Practice/actions/workflows/ci.yml/badge.svg)](https://github.com/JSL107/CI-CD-Practice/actions)
 
-<img src="https://codecov.io/gh/JSL107/CI-CD-Practice/graphs/sunburst.svg?token=2W6QF18C12"/>
+<img src="https://codecov.io/gh/JSL107/CI-CD-Practice/graphs/sunburst.svg?token=2W6QF18C12" alt=""/>
 
 <br>
 
@@ -33,9 +33,9 @@ GitHub Actions를 활용한 CI/CD 파이프라인을 적용하여 안정적인 �
 
 ### 1. 필수 요구사항
 
-- Java 11 이상
+- Java 17+
 - Maven
-- PostgreSQL
+- PostgreSQL / H2 Data Base
 
 ### 2. 실행 방법
 
