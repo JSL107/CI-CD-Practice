@@ -21,8 +21,8 @@ jobs:
           cache: maven
           java-version: '17'
 
-#      - name: Build with Maven
-#        run: mvn clean install
+      #      - name: Build with Maven
+      #        run: mvn clean install
       - name: Build and Generate Coverage Report
         run: mvn clean verify
 
@@ -37,3 +37,21 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: target/site/jacoco/jacoco.xml
+
+      - name: Discord Notify Success
+        if: success()
+        uses: Ilshidur/action-discord@master
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: |
+            ✅ Build 성공: `${{ github.repository }}`
+            🔗 [Action 보기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+      - name: Discord Notify Failure
+        if: failure()
+        uses: Ilshidur/action-discord@master
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: |
+            ❌ Build 실패: `${{ github.repository }}`
+            🔗 [확인하기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
