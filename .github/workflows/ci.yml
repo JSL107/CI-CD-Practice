@@ -41,8 +41,9 @@ jobs:
       - name: Discord Notify Success
         if: success()
         uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
           message: |
             ✅ Build 성공: `${{ github.repository }}`
             🔗 [Action 보기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
@@ -50,8 +51,10 @@ jobs:
       - name: Discord Notify Failure
         if: failure()
         uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
           message: |
             ❌ Build 실패: `${{ github.repository }}`
             🔗 [확인하기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
