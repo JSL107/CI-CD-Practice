@@ -1,0 +1,29 @@
+name: Docker Build with Maven
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build with Maven
+        run: ./mvnw clean package -DskipTests
+
+      - name: Build Docker image
+        run: docker build -t ci-cd-practice .
+
+      - name: Save Docker image as .tar
+        run: docker save ci-cd-practice -o ci-cd-practice.tar
