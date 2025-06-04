@@ -9,6 +9,9 @@ jobs:
   docker:
     runs-on: ubuntu-latest
 
+    env:
+      TAG: latest
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
@@ -26,13 +29,10 @@ jobs:
         run: ./mvnw clean package -DskipTests
 
       - name: Build Docker image
-        run: docker build -t ci-cd-practice .
+        run: docker build -t ci-cd-practice:${{ env.TAG }} .
 
       - name: Save Docker image as .tar
-        run: docker save ci-cd-practice -o ci-cd-practice.tar
-<<<<<<< HEAD
-=======
-
+        run: docker save ci-cd-practice:${{ env.TAG }} -o ci-cd-practice.tar
 
       - name: Discord Notify Docker Success
         if: success()
@@ -56,5 +56,3 @@ jobs:
             ❌ Docker 이미지 빌드 실패!
             ⛔ 태그: `${{ env.TAG }}`
             🔗 [실패 로그 확인하기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
->>>>>>> 6f60ff61fd3648fe7970c952ffbd5306c3285a6f
