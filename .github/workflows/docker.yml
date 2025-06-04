@@ -30,3 +30,31 @@ jobs:
 
       - name: Save Docker image as .tar
         run: docker save ci-cd-practice -o ci-cd-practice.tar
+<<<<<<< HEAD
+=======
+
+
+      - name: Discord Notify Docker Success
+        if: success()
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          message: |
+            🐳 Docker 이미지 빌드 & 푸시 성공!
+            🏷️ 태그: `${{ env.TAG }}`
+            📦 저장소: `${{ secrets.DOCKER_USERNAME }}/ci-cd-practice`
+            🔗 [Action 보기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+      - name: Discord Notify Docker Failure
+        if: failure()
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          message: |
+            ❌ Docker 이미지 빌드 실패!
+            ⛔ 태그: `${{ env.TAG }}`
+            🔗 [실패 로그 확인하기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+>>>>>>> 6f60ff61fd3648fe7970c952ffbd5306c3285a6f

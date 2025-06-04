@@ -45,8 +45,11 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
           message: |
-            ✅ Build 성공: `${{ github.repository }}`
-            🔗 [Action 보기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            ✅ CI 빌드 성공
+            🔨 브랜치: `${{ github.ref_name }}`
+            🧪 커밋: `${{ github.event.head_commit.message }}`
+            🧑‍💻 작성자: `${{ github.actor }}`
+            🔗 [자세히 보기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
       - name: Discord Notify Failure
         if: failure()
@@ -55,6 +58,8 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
           message: |
-            ❌ Build 실패: `${{ github.repository }}`
-            🔗 [확인하기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
+            ❌ CI 빌드 실패
+            🔨 브랜치: `${{ github.ref_name }}`
+            🧪 커밋: `${{ github.event.head_commit.message }}`
+            💬 확인이 필요합니다!
+            🔗 [로그 보기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
