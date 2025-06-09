@@ -15,7 +15,7 @@ GitHub Actions를 활용한 CI/CD 파이프라인을 적용하여 안정적인 �
 
 ## 📝 프로젝트 소개
 
-- **목적**: (예: 백오피스 자동화 / REST API 서비스 구축 / 실시간 데이터 처리 등)
+- **목적**: CI/CD를 학습 및 인프라 구축을 위해 AWS ECR, ECS(EC2), Docker를 이용한다.
 - **주요 기능**:
   - 기능 1
   - 기능 2
@@ -26,6 +26,8 @@ GitHub Actions를 활용한 CI/CD 파이프라인을 적용하여 안정적인 �
   - PostgreSQL
   - GitHub Actions
   - Maven
+  - AWS ECR, ECS
+  - Docker
 
 <br>
 
