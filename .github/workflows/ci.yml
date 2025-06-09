@@ -39,7 +39,7 @@ jobs:
           files: target/site/jacoco/jacoco.xml
 
       - name: Discord Notify Success
-        if: success()
+        if: ${{ github.event_name == 'pull_request' && success() }}
         uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
@@ -52,7 +52,7 @@ jobs:
             🔗 [자세히 보기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
       - name: Discord Notify Failure
-        if: failure()
+        if: ${{ github.event_name == 'pull_request' && failure() }}
         uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
