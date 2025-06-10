@@ -47,7 +47,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Discord Notify Release Success
-        if: success()
+        if: success() && steps.release.outputs.release_created == 'true'
         uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
@@ -59,7 +59,7 @@ jobs:
             🔗 [Release 확인하기](https://github.com/${{ github.repository }}/releases/tag/${{ steps.release.outputs.tag_name }})
 
       - name: Discord Notify Release Failure
-        if: failure()
+        if: failure() && steps.release.outputs.release_created == 'true'
         uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
@@ -68,4 +68,3 @@ jobs:
             ❌ GitHub Release 실패!
             ⚠️ 버전 태그 생성 또는 빌드 중 문제가 발생했습니다.
             🔗 [작업 로그 보기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
