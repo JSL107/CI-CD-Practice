@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'Dockerfile'
+      - '.github/workflows/docker.yml'
+      - 'src/**'
+      - 'pom.xml'
 
 jobs:
   docker:
@@ -29,25 +34,25 @@ jobs:
         run: ./mvnw clean package -DskipTests
 
       - name: Build Docker image
+        id: docker_build
         run: docker build -t ci-cd-practice:${{ env.TAG }} .
 
       - name: Save Docker image as .tar
         run: docker save ci-cd-practice:${{ env.TAG }} -o ci-cd-practice.tar
 
       - name: Discord Notify Docker Success
-        if: success()
+        if: success() && steps.docker_build.outcome == 'success'
         uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
           message: |
-            🐳 Docker 이미지 빌드 & 푸시 성공!
+            🐳 Docker 이미지 빌드 & 저장 성공!
             🏷️ 태그: `${{ env.TAG }}`
-            📦 저장소: `${{ secrets.DOCKER_USERNAME }}/ci-cd-practice`
             🔗 [Action 보기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
       - name: Discord Notify Docker Failure
-        if: failure()
+        if: failure() && steps.docker_build.outcome == 'failure'
         uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
