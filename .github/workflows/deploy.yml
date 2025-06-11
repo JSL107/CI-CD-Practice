@@ -73,3 +73,5 @@ jobs:
           cluster: ${{ env.ECS_CLUSTER }}
           service: ${{ env.ECS_SERVICE }}
           task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+          deployment-controller-type: ECS
+          deployment-configuration: '{"minimumHealthyPercent": 100, "maximumPercent": 200}'
