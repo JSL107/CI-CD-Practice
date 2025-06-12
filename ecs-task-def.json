@@ -1,23 +1,27 @@
 {
-  "family": "back-end-task",
+  "family": "my-springboot-app",
   "executionRoleArn": "${EXECUTION_ROLE_ARN}",
   "networkMode": "bridge",
-  "requiresCompatibilities": ["EC2"],
-  "cpu": "128",
-  "memory": "256",
   "containerDefinitions": [
     {
       "name": "app",
-      "image": "<IMAGE_URI>",
+      "image": "dummy",
+      "essential": true,
       "portMappings": [
         {
           "containerPort": 8080,
-          "hostPort": 8080,
-          "protocol": "tcp"
+          "hostPort": 8080
         }
       ],
-      "essential": true,
-      "environment": []
+      "environment": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/my-springboot-app",
+          "awslogs-region": "${AWS_REGION}",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
     }
   ]
 }
