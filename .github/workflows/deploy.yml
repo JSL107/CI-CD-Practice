@@ -27,7 +27,7 @@ jobs:
           java-version: '17'
           cache: gradle
 
-      - name: Make mvnw executable
+      - name: Make gradlew executable
         run: chmod +x gradlew
 
       - name: Build Spring Boot project
