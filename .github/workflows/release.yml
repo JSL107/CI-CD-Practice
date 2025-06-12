@@ -15,17 +15,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout source
+        if: steps.release.outputs.release_created == 'true'
+        uses: actions/checkout@v4
+
       - name: Release Please
         id: release
         uses: googleapis/release-please-action@v4
         with:
-          release-type: maven
+          release-type: java
           package-name: auth
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Checkout source
-        if: steps.release.outputs.release_created == 'true'
-        uses: actions/checkout@v4
 
       - name: Set up JDK
         if: steps.release.outputs.release_created == 'true'
@@ -33,16 +33,17 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: gradle
 
-      - name: Build with Maven
+      - name: Build with Gradle
         if: steps.release.outputs.release_created == 'true'
-        run: mvn clean package -DskipTests
+        run: ./gradlew clean bootJar -x test
 
       - name: Upload .jar to GitHub Release
         if: steps.release.outputs.release_created == 'true'
         uses: softprops/action-gh-release@v1
         with:
-          files: target/*.jar
+          files: build/libs/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
