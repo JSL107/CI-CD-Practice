@@ -36,7 +36,7 @@ GitHub Actions를 활용한 CI/CD 파이프라인을 적용하여 안정적인 �
 ### 1. 필수 요구사항
 
 - Java 17+
-- Maven
+- ~~Maven~~ => Gradle
 - PostgreSQL / H2 Data Base
 
 ### 2. 실행 방법
@@ -47,8 +47,11 @@ git clone https://github.com/JSL107/CI-CD-Practice.git
 cd CI-CD-Practice
 
 # 2. 빌드 및 실행
-./mvnw clean install
-./mvnw spring-boot:run
+# 빌드
+./gradlew clean build
+
+# 실행
+./gradlew bootRun
 ```
 
 <br>
