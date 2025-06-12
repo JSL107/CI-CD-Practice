@@ -15,17 +15,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout source
+        if: steps.release.outputs.release_created == 'true'
+        uses: actions/checkout@v4
+
       - name: Release Please
         id: release
         uses: googleapis/release-please-action@v4
         with:
-          release-type: gradle
+          release-type: java
           package-name: auth
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Checkout source
-        if: steps.release.outputs.release_created == 'true'
-        uses: actions/checkout@v4
 
       - name: Set up JDK
         if: steps.release.outputs.release_created == 'true'
