@@ -17,4 +17,6 @@ jobs:
         uses: google-github-actions/release-please-action@v3
         with:
           release-type: java
+          package-name: auth
           token: ${{ secrets.GITHUB_TOKEN }}
+          mode: github-release
