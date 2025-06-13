@@ -1,11 +1,9 @@
 {
-  "family": "my-springboot-app",
-  "executionRoleArn": "${EXECUTION_ROLE_ARN}",
-  "networkMode": "bridge",
+  "family": "my-app-task",
   "containerDefinitions": [
     {
-      "name": "app",
-      "image": "dummy",
+      "name": "my-app",
+      "image": "<ECR-URL>:${VERSION}",
       "essential": true,
       "portMappings": [
         {
@@ -13,15 +11,24 @@
           "hostPort": 8080
         }
       ],
-      "environment": [],
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "/ecs/my-springboot-app",
-          "awslogs-region": "${AWS_REGION}",
-          "awslogs-stream-prefix": "ecs"
+      "environment": [
+        {
+          "name": "SPRING_PROFILES_ACTIVE",
+          "value": "prod"
+        },
+        {
+          "name": "SPRING_DATASOURCE_URL",
+          "value": "jdbc:postgresql://rds-endpoint:5432/mydb"
+        },
+        {
+          "name": "SPRING_DATASOURCE_USERNAME",
+          "value": "user"
+        },
+        {
+          "name": "SPRING_DATASOURCE_PASSWORD",
+          "value": "password"
         }
-      }
+      ]
     }
   ]
 }
