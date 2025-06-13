@@ -1,4 +1,4 @@
-name: Release
+name: Release Please
 
 on:
   push:
@@ -15,57 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
-        if: steps.release.outputs.release_created == 'true'
-        uses: actions/checkout@v4
-
       - name: Release Please
         id: release
-        uses: googleapis/release-please-action@v4
+        uses: google-github-actions/release-please-action@v3
         with:
           release-type: java
           package-name: auth
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up JDK
-        if: steps.release.outputs.release_created == 'true'
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: gradle
-
-      - name: Build with Gradle
-        if: steps.release.outputs.release_created == 'true'
-        run: ./gradlew clean bootJar -x test
-
-      - name: Upload .jar to GitHub Release
-        if: steps.release.outputs.release_created == 'true'
-        uses: softprops/action-gh-release@v1
-        with:
-          files: build/libs/*.jar
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Discord Notify Release Success
-        if: success() && steps.release.outputs.release_created == 'true'
-        uses: Ilshidur/action-discord@master
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        with:
-          message: |
-            🏷️ GitHub Release 생성 완료!
-            🔖 버전: `${{ steps.release.outputs.tag_name }}`
-            📦 릴리즈가 성공적으로 생성되었습니다.
-            🔗 [Release 확인하기](https://github.com/${{ github.repository }}/releases/tag/${{ steps.release.outputs.tag_name }})
-
-      - name: Discord Notify Release Failure
-        if: failure() && steps.release.outputs.release_created == 'true'
-        uses: Ilshidur/action-discord@master
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        with:
-          message: |
-            ❌ GitHub Release 실패!
-            ⚠️ 버전 태그 생성 또는 빌드 중 문제가 발생했습니다.
-            🔗 [작업 로그 보기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
