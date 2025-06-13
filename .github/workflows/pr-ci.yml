@@ -20,13 +20,15 @@ jobs:
       - name: Discord notification (success)
         if: success()
         uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          message: "✅ PR Build Succeeded: ${{ github.event.pull_request.title }}"
+          args: "✅ Build Success!"
 
       - name: Discord notification (failure)
         if: failure()
         uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          message: "❌ PR Build Failed: ${{ github.event.pull_request.title }}"
+          args: "❌ Build Failed!"

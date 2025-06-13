@@ -71,13 +71,15 @@ jobs:
       - name: Discord notification (success)
         if: success()
         uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          message: "✅ Deployment Successful! Version: ${{ env.VERSION }}"
+          args: "✅ Deployment Successful! Version: ${{ env.VERSION }}"
 
       - name: Discord notification (failure)
         if: failure()
         uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          message: "❌ Deployment Failed! Check logs for details."
+          args: "❌ Deployment Failed! Check logs for details."
