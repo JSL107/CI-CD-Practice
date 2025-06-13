@@ -1,0 +1,34 @@
+name: Pull Request Build Check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  pr-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build docker image (only test build, no push)
+        run: |
+          docker build -t test-build .
+
+      - name: Discord notification (success)
+        if: success()
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: "✅ Build Success!"
+
+      - name: Discord notification (failure)
+        if: failure()
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: "❌ Build Failed!"

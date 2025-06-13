@@ -1,27 +1,25 @@
-# .github/workflows/cicd.yml
-
-name: CI/CD Pipeline
+name: Full CI/CD Pipeline
 
 on:
   push:
     tags:
-      - 'v*'  # Release Please가 만들어주는 태그
-  workflow_dispatch:  # 수동으로도 실행 가능
+      - 'v*'
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
-    name: Build, Push, Deploy
+    name: Build, Push, Deploy to ECS
     runs-on: ubuntu-latest
 
     env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
       ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
       ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
-      SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
+      CLUSTER_NAME: ${{ secrets.ECS_CLUSTER }}
+      SERVICE_NAME: ${{ secrets.ECS_SERVICE }}
 
     steps:
-      - name: Checkout source code
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Configure AWS credentials
@@ -32,12 +30,15 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Extract version from tag
-        id: vars
+        id: extract_version
         run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       - name: Login to Amazon ECR
         run: |
           aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+
+      - name: Permission To Gradlew
+        run: chmod +x gradlew
 
       - name: Build Docker image
         run: |
@@ -47,18 +48,41 @@ jobs:
         run: |
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION
 
-      - name: Update ECS task definition
-        id: task-def
+      - name: Render ECS task definition with secrets
+        id: render-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: ecs-task-def.json
           container-name: my-app
           image: "${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.VERSION }}"
-
+          environment-variables: |
+            SPRING_PROFILES_ACTIVE=${{ secrets.SPRING_PROFILES_ACTIVE }}
+            JAVA_OPTS=${{ secrets.JAVA_OPTS }}
+            SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }}
+            SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}
+            SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            OTHER_API_KEY=${{ secrets.OTHER_API_KEY }}
 
       - name: Deploy to Amazon ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           cluster: ${{ env.CLUSTER_NAME }}
           service: ${{ env.SERVICE_NAME }}
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+
+      - name: Discord notification (success)
+        if: success()
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: "✅ Deployment Successful! Version: ${{ env.VERSION }}"
+
+      - name: Discord notification (failure)
+        if: failure()
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: "❌ Deployment Failed! Check logs for details."
