@@ -3,31 +3,20 @@
   "containerDefinitions": [
     {
       "name": "my-app",
-      "image": "<ECR-URL>:${VERSION}",
+      "image": "${ECR_IMAGE_URI}:${VERSION}",
       "essential": true,
       "portMappings": [
-        {
-          "containerPort": 8080,
-          "hostPort": 8080
-        }
+        { "containerPort": 8080, "hostPort": 8080 }
       ],
       "environment": [
-        {
-          "name": "SPRING_PROFILES_ACTIVE",
-          "value": "prod"
-        },
-        {
-          "name": "SPRING_DATASOURCE_URL",
-          "value": "jdbc:postgresql://rds-endpoint:5432/mydb"
-        },
-        {
-          "name": "SPRING_DATASOURCE_USERNAME",
-          "value": "user"
-        },
-        {
-          "name": "SPRING_DATASOURCE_PASSWORD",
-          "value": "password"
-        }
+        { "name": "SPRING_PROFILES_ACTIVE", "value": "${SPRING_PROFILES_ACTIVE}" },
+        { "name": "JAVA_OPTS", "value": "${JAVA_OPTS}" },
+        { "name": "SPRING_DATASOURCE_URL", "value": "${SPRING_DATASOURCE_URL}" },
+        { "name": "SPRING_DATASOURCE_USERNAME", "value": "${SPRING_DATASOURCE_USERNAME}" },
+        { "name": "SPRING_DATASOURCE_PASSWORD", "value": "${SPRING_DATASOURCE_PASSWORD}" },
+        { "name": "JWT_SECRET", "value": "${JWT_SECRET}" },
+        { "name": "OTHER_API_KEY", "value": "${OTHER_API_KEY}" }
+
       ]
     }
   ]
