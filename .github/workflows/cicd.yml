@@ -37,11 +37,9 @@ jobs:
         run: |
           aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
 
-      - name: Permission To Gradlew
-        run: chmod +x gradlew
-
       - name: Build Docker image
         run: |
+          chmod +x gradlew
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION .
 
       - name: Push Docker image to ECR

@@ -1,4 +1,4 @@
-name: Pull Request Notification
+name: Pull Request Notify
 
 on:
   pull_request:
@@ -7,10 +7,10 @@ on:
 jobs:
   notify:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Discord notification for PR
+      - name: Discord PR created
         uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          message: "📢 New Pull Request: ${{ github.event.pull_request.title }} by ${{ github.actor }}\n${{ github.event.pull_request.html_url }}"
+          args: "📢 New PR: ${{ github.event.pull_request.title }}\nBy: ${{ github.actor }}\nURL: ${{ github.event.pull_request.html_url }}"

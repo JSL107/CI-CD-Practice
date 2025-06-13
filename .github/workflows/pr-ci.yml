@@ -15,6 +15,7 @@ jobs:
 
       - name: Build docker image (only test build, no push)
         run: |
+          chmod +x gradlew
           docker build -t test-build .
 
       - name: Discord notification (success)
